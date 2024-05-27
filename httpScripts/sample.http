@@ -1,0 +1,26 @@
+### GET /health
+GET localhost:5001/health
+
+### GET /items
+GET localhost:5001/items?page=0&pageSize=10
+
+### POST /items
+POST localhost:5001/items
+Content-Type: application/x-www-form-urlencoded
+
+name = Lens &
+price = 120000 &
+manufacturer = Canon
+
+### PUT /items
+PUT localhost:5001/items/b3da050b-022c-42d0-b4f3-7e668b98955e
+Content-Type: application/json
+
+{
+  "name": "Lens Cap",
+  "price": "888888888",
+  "manufacturer": "Canon"
+}
+
+### DELETE /items
+DELETE localhost:5001/items/b3da050b-022c-42d0-b4f3-7e668b98955e
