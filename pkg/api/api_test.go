@@ -56,7 +56,7 @@ func Test_ItemsEndpoint_WhenUnsupportedMethodIsGiven_Returns405(t *testing.T) {
 		httpMethod string
 		endpoint   string
 	}{
-		{"PUT", "/items/123"},
+		{"PUT", "/items"},
 		{"POST", "/items/123"},
 	}
 
@@ -329,13 +329,13 @@ func Test_ItemsEndpoint_UpdateItem_WhenGivenInvalidItem_ShouldReturnBadRequest(t
 	a := NewAPI(*dbConnectionString)
 
 	jsonRequest, _ := json.Marshal(map[string]string{
-		"id":           "",
 		"name":         "",
 		"price":        "",
 		"manufacturer": "",
 	})
+	requestUrl := fmt.Sprintf("/items/%s", uuid.New().String())
 
-	request, err := http.NewRequest("PUT", "/items", bytes.NewReader(jsonRequest))
+	request, err := http.NewRequest("PUT", requestUrl, bytes.NewReader(jsonRequest))
 	if err != nil {
 		t.Fatal(err)
 	}

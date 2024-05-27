@@ -11,10 +11,17 @@ require (
 )
 
 require (
+	github.com/AlekSi/gocov-xml v1.1.0 // indirect
 	github.com/asaskevich/govalidator v0.0.0-20230301143203-a9d515a09cc2 // indirect
+	github.com/axw/gocov v1.1.0 // indirect
 	github.com/corpix/uarand v0.0.0-20170723150923-031be390f409 // indirect
 	github.com/davecgh/go-spew v1.1.1 // indirect
 	github.com/google/uuid v1.6.0 // indirect
+	github.com/jstemmer/go-junit-report v1.0.0 // indirect
+	github.com/matm/gocov-html v1.4.0 // indirect
+	github.com/matryer/moq v0.3.4 // indirect
 	github.com/pmezard/go-difflib v1.0.0 // indirect
+	golang.org/x/mod v0.14.0 // indirect
+	golang.org/x/tools v0.17.0 // indirect
 	gopkg.in/yaml.v3 v3.0.1 // indirect
 )

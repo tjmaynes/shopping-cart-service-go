@@ -13,7 +13,7 @@ install:
 	./scripts/install.sh
 
 generate_mocks:
-	moq -out pkg/cart/repository_mock.go pkg/cart Repository
+	moq -out pkg/item/repository_mock.go pkg/item Repository
 
 generate_seed_data:
 	go run ./cmd/shopping-cart-service-seeder \
@@ -72,7 +72,7 @@ connect_localhost_to_remote_db:
 format:
 	go fmt github.com/tjmaynes/shopping-cart-service-go
 
-deploy: test build_image push_image
+deploy: install test
 
 run_local_db:
 	docker compose up

@@ -1,0 +1,29 @@
+name: Deploy
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  deploy:
+    runs-on: ubuntu-20.04
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: "0"
+      - name: Setup Go
+        uses: actions/setup-go@v5
+        with:
+          go-version: 1.22
+          cache-dependency-path: go.sum
+      - name: 🔨 Run docker compose 🔨
+        uses: hoverkraft-tech/compose-action@v1.5.1
+        with:
+          compose-file: "docker-compose.yml"
+      - name: 🔨 Install Dependencies 🔨
+        run: sudo apt-get update && sudo apt-get install make
+      - name: 🚀 Deploy 🚀
+        run: make deploy
+        env:
+          REGISTRY_PASSWORD: ${{ secrets.REGISTRY_PASSWORD }}

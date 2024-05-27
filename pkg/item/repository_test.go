@@ -28,7 +28,7 @@ func Test_ItemRepository_GetItems_ShouldReturnItems(t *testing.T) {
 	item4 := Item{ID: uuid.New(), Name: fake.ProductName(), Price: 11, Manufacturer: fake.Brand()}
 	item5 := Item{ID: uuid.New(), Name: fake.ProductName(), Price: 100, Manufacturer: fake.Brand()}
 
-	mock.ExpectQuery("SELECT id, name, price, manufacturer FROM cart ORDER BY id LIMIT \\$1 OFFSET \\$2").
+	mock.ExpectQuery("SELECT id, name, price, manufacturer FROM item ORDER BY id LIMIT \\$1 OFFSET \\$2").
 		WithArgs(pageSize, page*pageSize).
 		WillReturnRows(
 			sqlmock.NewRows(columns).
@@ -45,7 +45,7 @@ func Test_ItemRepository_GetItems_ShouldReturnItems(t *testing.T) {
 
 	result, err := sut.GetItems(ctx, page, pageSize)
 	if err != nil {
-		t.Fatalf("Error '%s' was not expected when fetching cart items", err)
+		t.Fatalf("Error '%s' was not expected when fetching items", err)
 	}
 
 	if len(result) != pageSize {
@@ -68,7 +68,7 @@ func Test_ItemRepository_GetItems_WhenErrorOccurs_ShouldReturnError(t *testing.T
 	const page = 0
 	expectedError := createError()
 
-	mock.ExpectQuery("SELECT id, name, price, manufacturer FROM cart ORDER BY id LIMIT \\$1 OFFSET \\$2").
+	mock.ExpectQuery("SELECT id, name, price, manufacturer FROM item ORDER BY id LIMIT \\$1 OFFSET \\$2").
 		WithArgs(pageSize, page*pageSize).
 		WillReturnError(expectedError)
 
@@ -77,11 +77,11 @@ func Test_ItemRepository_GetItems_WhenErrorOccurs_ShouldReturnError(t *testing.T
 
 	result, err := sut.GetItems(ctx, page, pageSize)
 	if result != nil {
-		t.Fatalf("Result '%s' was not expected when simulating a failed fetching cart item", err)
+		t.Fatalf("Result '%s' was not expected when simulating a failed fetching item", err)
 	}
 
 	if !errors.Is(expectedError, err) {
-		t.Fatalf("Expected failure '%s', but received '%s' when simulating a failed fetching cart item", expectedError, err)
+		t.Fatalf("Expected failure '%s', but received '%s' when simulating a failed fetching item", expectedError, err)
 	}
 
 	if err := mock.ExpectationsWereMet(); err != nil {
@@ -99,7 +99,7 @@ func Test_ItemRepository_GetItemByID_WhenItemExists_ShouldReturnItem(t *testing.
 	columns := []string{"id", "name", "price", "manufacturer"}
 	expectedItem := Item{ID: uuid.New(), Name: fake.ProductName(), Price: 23, Manufacturer: fake.Brand()}
 
-	mock.ExpectQuery("SELECT id, name, price, manufacturer FROM cart WHERE id = \\$1").
+	mock.ExpectQuery("SELECT id, name, price, manufacturer FROM item WHERE id = \\$1").
 		WithArgs(expectedItem.ID).
 		WillReturnRows(sqlmock.NewRows(columns).FromCSVString(convertObjectToCSV(expectedItem))).
 		RowsWillBeClosed()
@@ -109,7 +109,7 @@ func Test_ItemRepository_GetItemByID_WhenItemExists_ShouldReturnItem(t *testing.
 
 	result, err := sut.GetItemByID(ctx, expectedItem.ID)
 	if err != nil {
-		t.Fatalf("Error '%s' was not expected when fetching cart item", err)
+		t.Fatalf("Error '%s' was not expected when fetching item", err)
 	}
 
 	if result != expectedItem {
@@ -131,7 +131,7 @@ func Test_ItemRepository_GetItemByID_WhenItemDoesNotExist_ShouldReturnError(t *t
 	expectedItemID := uuid.New()
 	expectedError := createError()
 
-	mock.ExpectQuery("SELECT id, name, price, manufacturer FROM cart WHERE id = \\$1").
+	mock.ExpectQuery("SELECT id, name, price, manufacturer FROM item WHERE id = \\$1").
 		WithArgs(expectedItemID).
 		WillReturnError(expectedError)
 
@@ -140,7 +140,7 @@ func Test_ItemRepository_GetItemByID_WhenItemDoesNotExist_ShouldReturnError(t *t
 
 	_, err = sut.GetItemByID(ctx, expectedItemID)
 	if !errors.Is(expectedError, err) {
-		t.Fatalf("Expected failure '%s', but received '%s' when simulating a failed fetching cart item", expectedError, err)
+		t.Fatalf("Expected failure '%s', but received '%s' when simulating a failed fetching item", expectedError, err)
 	}
 
 	if err := mock.ExpectationsWereMet(); err != nil {
@@ -158,7 +158,7 @@ func Test_ItemRepository_GetItemByID_WhenErrorOccurs_ShouldReturnError(t *testin
 	expectedItemID := uuid.New()
 	expectedError := createError()
 
-	mock.ExpectQuery("SELECT id, name, price, manufacturer FROM cart WHERE id = \\$1").
+	mock.ExpectQuery("SELECT id, name, price, manufacturer FROM item WHERE id = \\$1").
 		WithArgs(expectedItemID).
 		WillReturnError(expectedError)
 
@@ -168,7 +168,7 @@ func Test_ItemRepository_GetItemByID_WhenErrorOccurs_ShouldReturnError(t *testin
 	_, err = sut.GetItemByID(ctx, expectedItemID)
 
 	if !errors.Is(expectedError, err) {
-		t.Fatalf("Expected failure '%s', but received '%s' when simulating a failed fetching cart item", expectedError, err)
+		t.Fatalf("Expected failure '%s', but received '%s' when simulating a failed fetching item", expectedError, err)
 	}
 
 	if err := mock.ExpectationsWereMet(); err != nil {
@@ -187,7 +187,7 @@ func Test_ItemRepository_AddItem_ShouldReturnInsertedItem(t *testing.T) {
 	expectedId := uuid.New()
 	expectedItem := Item{ID: expectedId, Name: fake.ProductName(), Price: 23, Manufacturer: fake.Brand()}
 
-	mock.ExpectQuery("INSERT INTO cart \\(name, price, manufacturer\\) VALUES \\(\\$1, \\$2, \\$3\\)").
+	mock.ExpectQuery("INSERT INTO item \\(name, price, manufacturer\\) VALUES \\(\\$1, \\$2, \\$3\\)").
 		WithArgs(expectedItem.Name, expectedItem.Price, expectedItem.Manufacturer).
 		WillReturnRows(sqlmock.NewRows(columns).FromCSVString(expectedId.String()))
 
@@ -218,7 +218,7 @@ func Test_ItemRepository_AddItem_WhenErrorOccurs_ShouldReturnError(t *testing.T)
 	expectedItem := Item{ID: uuid.New(), Name: fake.ProductName(), Price: 23, Manufacturer: fake.Brand()}
 	expectedError := createError()
 
-	mock.ExpectQuery("INSERT INTO cart \\(name, price, manufacturer\\) VALUES \\(\\$1, \\$2, \\$3\\)").
+	mock.ExpectQuery("INSERT INTO item \\(name, price, manufacturer\\) VALUES \\(\\$1, \\$2, \\$3\\)").
 		WithArgs(expectedItem.Name, expectedItem.Price, expectedItem.Manufacturer).
 		WillReturnError(expectedError)
 
@@ -227,7 +227,7 @@ func Test_ItemRepository_AddItem_WhenErrorOccurs_ShouldReturnError(t *testing.T)
 
 	_, err = sut.AddItem(ctx, expectedItem.Name, expectedItem.Price, expectedItem.Manufacturer)
 	if !errors.Is(expectedError, err) {
-		t.Fatalf("Expected failure '%s', but received '%s' when simulating failure while adding cart item", expectedError, err)
+		t.Fatalf("Expected failure '%s', but received '%s' when simulating failure while adding item", expectedError, err)
 	}
 
 	if err := mock.ExpectationsWereMet(); err != nil {
@@ -244,7 +244,7 @@ func Test_ItemRepository_UpdateItem_ShouldUpdateSpecificItem(t *testing.T) {
 	expectedItem := Item{ID: uuid.New(), Name: fake.ProductName(), Price: 23, Manufacturer: fake.Brand()}
 
 	mock.ExpectBegin()
-	mock.ExpectExec("UPDATE cart SET name = \\$1, price = \\$2, manufacturer = \\$3 WHERE id = \\$4").
+	mock.ExpectExec("UPDATE item SET name = \\$1, price = \\$2, manufacturer = \\$3 WHERE id = \\$4").
 		WithArgs(expectedItem.Name, expectedItem.Price, expectedItem.Manufacturer, expectedItem.ID).
 		WillReturnResult(sqlmock.NewResult(0, 1))
 	mock.ExpectCommit()
@@ -254,7 +254,7 @@ func Test_ItemRepository_UpdateItem_ShouldUpdateSpecificItem(t *testing.T) {
 
 	result, err := sut.UpdateItem(ctx, &expectedItem)
 	if err != nil {
-		t.Fatalf("Result '%s' was not expected when simulating failure while updating cart item", err)
+		t.Fatalf("Result '%s' was not expected when simulating failure while updating item", err)
 	}
 
 	if result != expectedItem {
@@ -277,7 +277,7 @@ func Test_ItemRepository_UpdateItem_WhenErrorOccurs_ShouldReturnError(t *testing
 	expectedError := createError()
 
 	mock.ExpectBegin()
-	mock.ExpectExec("UPDATE cart SET name = \\$1, price = \\$2, manufacturer = \\$3 WHERE id = \\$4").
+	mock.ExpectExec("UPDATE item SET name = \\$1, price = \\$2, manufacturer = \\$3 WHERE id = \\$4").
 		WithArgs(expectedItem.Name, expectedItem.Price, expectedItem.Manufacturer, expectedItem.ID).
 		WillReturnError(expectedError)
 	mock.ExpectRollback()
@@ -287,7 +287,7 @@ func Test_ItemRepository_UpdateItem_WhenErrorOccurs_ShouldReturnError(t *testing
 
 	_, err = sut.UpdateItem(ctx, &expectedItem)
 	if !errors.Is(expectedError, err) {
-		t.Fatalf("Expected failure '%s', but received '%s' when simulating failure while updating cart item", expectedError, err)
+		t.Fatalf("Expected failure '%s', but received '%s' when simulating failure while updating item", expectedError, err)
 	}
 
 	if err := mock.ExpectationsWereMet(); err != nil {
@@ -304,7 +304,7 @@ func Test_ItemRepository_RemoveItem_ShouldReturnID(t *testing.T) {
 
 	expectedItemID := uuid.New()
 
-	mock.ExpectPrepare("DELETE FROM cart WHERE id = \\$1").
+	mock.ExpectPrepare("DELETE FROM item WHERE id = \\$1").
 		ExpectExec().
 		WithArgs(expectedItemID).
 		WillReturnResult(sqlmock.NewResult(1, 1))
@@ -314,7 +314,7 @@ func Test_ItemRepository_RemoveItem_ShouldReturnID(t *testing.T) {
 
 	result, err := sut.RemoveItem(ctx, expectedItemID)
 	if err != nil {
-		t.Fatalf("Result '%s' was not expected when simulating failure while removing cart item", err)
+		t.Fatalf("Result '%s' was not expected when simulating failure while removing item", err)
 	}
 
 	if result != expectedItemID {
@@ -336,7 +336,7 @@ func Test_ItemRepository_RemoveItem_WhenErrorOccurs_ShouldReturnError(t *testing
 	expectedItemID := uuid.New()
 	expectedError := createError()
 
-	mock.ExpectPrepare("DELETE FROM cart WHERE id = \\$1").
+	mock.ExpectPrepare("DELETE FROM item WHERE id = \\$1").
 		ExpectExec().
 		WithArgs(expectedItemID).
 		WillReturnError(expectedError)
@@ -350,7 +350,7 @@ func Test_ItemRepository_RemoveItem_WhenErrorOccurs_ShouldReturnError(t *testing
 	}
 
 	if !errors.Is(expectedError, err) {
-		t.Fatalf("Expected failure '%s', but received '%s' when simulating failure while removing cart item", expectedError, err)
+		t.Fatalf("Expected failure '%s', but received '%s' when simulating failure while removing item", expectedError, err)
 	}
 
 	if err := mock.ExpectationsWereMet(); err != nil {
