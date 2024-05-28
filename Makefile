@@ -32,16 +32,17 @@ seed:
 	--seed-data-source=${PWD}/db/seed.json
 
 test: migrate generate_mocks
-	DATABASE_URL=$(DATABASE_URL) \
-	PORT=$(PORT) \
+	mkdir -p coverage || true
+	DATABASE_URL=$(DATABASE_URL) PORT=$(PORT) \
 	SEED_DATA_SOURCE=${PWD}/db/seed.json \
-	go test -v -coverprofile=coverage.txt ./...
+	go test -v -coverprofile=coverage/coverage.txt ./...
 
 ci_test:
-	make test 2>&1 | go-junit-report > report.xml
-	gocov convert coverage.txt > coverage.json    
-	gocov-xml < coverage.json > coverage.xml
-	(mkdir -p coverage || true) && gocov-html < coverage.json > coverage/index.html
+	mkdir -p coverage || true
+	make test 2>&1 | go-junit-report -out coverage/report.xml
+	gocov convert coverage/coverage.txt > coverage/coverage.json
+	gocov-xml < coverage/coverage.json > coverage/coverage.xml
+	gocov-html < coverage/coverage.json > coverage/index.html
 
 build:
 	go build -o dist/shopping-cart-service ./cmd/shopping-cart-service
@@ -72,7 +73,7 @@ connect_localhost_to_remote_db:
 format:
 	go fmt github.com/tjmaynes/shopping-cart-service-go
 
-deploy: install test
+deploy: install ci_test
 
 run_local_db:
 	docker compose up

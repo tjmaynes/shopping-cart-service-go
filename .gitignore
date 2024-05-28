@@ -20,7 +20,7 @@ vendor/
 # Generated
 dist/
 bin/
-coverage.txt
+coverage/
 
 # Go workspace file
 go.work

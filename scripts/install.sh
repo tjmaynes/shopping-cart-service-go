@@ -63,20 +63,11 @@ function main() {
     download_and_install_dbmate
   fi
 
-  go get github.com/matryer/moq@latest
   go install github.com/matryer/moq@latest
-
-  go get github.com/jstemmer/go-junit-report
-  go install github.com/jstemmer/go-junit-report
-
-  go get github.com/axw/gocov/gocov
-  go install github.com/axw/gocov/gocov
-
-	go get github.com/AlekSi/gocov-xml
-	go install github.com/AlekSi/gocov-xml
-
-	go get github.com/matm/gocov-html
-#	go install github.com/matm/gocov-html
+  go install github.com/jstemmer/go-junit-report/v2@latest
+  go install github.com/axw/gocov/gocov@latest
+  go install github.com/AlekSi/gocov-xml@latest
+  go install github.com/matm/gocov-html/cmd/gocov-html@latest
 }
 
 main
