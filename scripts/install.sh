@@ -63,6 +63,10 @@ function main() {
     download_and_install_dbmate
   fi
 
+  if [[ -n "$(command -v asdf)" ]]; then
+    asdf install
+  fi
+
   go install github.com/matryer/moq@latest
   go install github.com/jstemmer/go-junit-report/v2@latest
   go install github.com/axw/gocov/gocov@latest
