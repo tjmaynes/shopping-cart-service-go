@@ -2,7 +2,7 @@ package handler
 
 import (
 	"database/sql"
-	jsonHandler "github.com/tjmaynes/shopping-cart-service-go/handler/json"
+	jsonHandler "github.com/tjmaynes/shopping-cart-service-go/internal/handler/json"
 	"net/http"
 )
 

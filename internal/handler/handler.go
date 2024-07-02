@@ -5,7 +5,7 @@ import (
 	"github.com/go-chi/chi/v5/middleware"
 	"net/http"
 
-	handlers "github.com/tjmaynes/shopping-cart-service-go/handler/http"
+	handlers "github.com/tjmaynes/shopping-cart-service-go/internal/handler/http"
 )
 
 // Initialize ..

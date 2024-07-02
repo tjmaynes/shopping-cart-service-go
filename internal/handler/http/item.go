@@ -7,8 +7,8 @@ import (
 	"strconv"
 	"strings"
 
-	jsonHandler "github.com/tjmaynes/shopping-cart-service-go/handler/json"
-	cart "github.com/tjmaynes/shopping-cart-service-go/pkg/item"
+	jsonHandler "github.com/tjmaynes/shopping-cart-service-go/internal/handler/json"
+	cart "github.com/tjmaynes/shopping-cart-service-go/internal/pkg/item"
 )
 
 // NewItemHandler ..

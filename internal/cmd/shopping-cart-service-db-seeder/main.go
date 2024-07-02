@@ -10,8 +10,8 @@ import (
 	"io"
 	"os"
 
-	driver "github.com/tjmaynes/shopping-cart-service-go/driver"
-	"github.com/tjmaynes/shopping-cart-service-go/pkg/item"
+	driver "github.com/tjmaynes/shopping-cart-service-go/internal/driver"
+	"github.com/tjmaynes/shopping-cart-service-go/internal/pkg/item"
 )
 
 // SeedData ..

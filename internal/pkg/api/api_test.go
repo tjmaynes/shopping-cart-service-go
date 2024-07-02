@@ -17,8 +17,8 @@ import (
 	"testing"
 
 	"github.com/icrowley/fake"
-	driver "github.com/tjmaynes/shopping-cart-service-go/driver"
-	cart "github.com/tjmaynes/shopping-cart-service-go/pkg/item"
+	driver "github.com/tjmaynes/shopping-cart-service-go/internal/driver"
+	cart "github.com/tjmaynes/shopping-cart-service-go/internal/pkg/item"
 )
 
 var (

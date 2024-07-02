@@ -13,29 +13,29 @@ install:
 	./scripts/install.sh
 
 generate_mocks:
-	moq -out pkg/item/repository_mock.go pkg/item Repository
+	moq -out internal/pkg/item/repository_mock.go internal/pkg/item Repository
 
 generate_seed_data:
-	go run ./cmd/shopping-cart-service-seeder \
-	--seed-data-destination=db/seed.json \
+	go run ./internal/cmd/shopping-cart-service-seeder \
+	--seed-data-destination=${PWD}/internal/db/seed.json \
 	--item-count=100 \
 	--manufacturer-count=5
 
 migrate:
-	DATABASE_URL=$(DATABASE_URL) bin/dbmate wait
-	DATABASE_URL=$(DATABASE_URL) bin/dbmate up
-	DATABASE_URL=$(DATABASE_URL) bin/dbmate migrate
+	DATABASE_URL=$(DATABASE_URL) bin/dbmate --migrations-dir=${PWD}/internal/db/migrations wait
+	DATABASE_URL=$(DATABASE_URL) bin/dbmate --migrations-dir=${PWD}/internal/db/migrations up
+	DATABASE_URL=$(DATABASE_URL) bin/dbmate --migrations-dir=${PWD}/internal/db/migrations migrate
 
 seed:
-	go run ./cmd/shopping-cart-service-db-seeder \
+	go run ./internal/cmd/shopping-cart-service-db-seeder \
 	--db-source=$(DATABASE_URL) \
-	--seed-data-source=${PWD}/db/seed.json
+	--seed-data-source=${PWD}/internal/db/seed.json
 
 test: migrate generate_mocks
 	mkdir -p coverage || true
 	DATABASE_URL=$(DATABASE_URL) PORT=$(PORT) \
-	SEED_DATA_SOURCE=${PWD}/db/seed.json \
-	go test -v -coverprofile=coverage/coverage.txt ./...
+	SEED_DATA_SOURCE=${PWD}/internal/db/seed.json \
+	go test -v -coverprofile=coverage/coverage.txt ./internal/...
 
 ci_test:
 	mkdir -p coverage || true
@@ -45,7 +45,7 @@ ci_test:
 	gocov-html < coverage/coverage.json > coverage/index.html
 
 build:
-	go build -o dist/shopping-cart-service ./cmd/shopping-cart-service
+	go build -o dist/shopping-cart-service ./internal/cmd/shopping-cart-service
 
 start: build migrate
 	DATABASE_URL=$(DATABASE_URL) PORT=$(PORT) ./dist/shopping-cart-service

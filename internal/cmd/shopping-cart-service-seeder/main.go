@@ -9,7 +9,7 @@ import (
 	"os"
 
 	"github.com/icrowley/fake"
-	"github.com/tjmaynes/shopping-cart-service-go/pkg/item"
+	"github.com/tjmaynes/shopping-cart-service-go/internal/pkg/item"
 )
 
 // GenerateSeedData ..

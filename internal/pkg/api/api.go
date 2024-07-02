@@ -11,10 +11,10 @@ import (
 	"syscall"
 	"time"
 
-	driver "github.com/tjmaynes/shopping-cart-service-go/driver"
-	"github.com/tjmaynes/shopping-cart-service-go/handler"
-	handlers "github.com/tjmaynes/shopping-cart-service-go/handler/http"
-	"github.com/tjmaynes/shopping-cart-service-go/pkg/item"
+	driver "github.com/tjmaynes/shopping-cart-service-go/internal/driver"
+	"github.com/tjmaynes/shopping-cart-service-go/internal/handler"
+	handlers "github.com/tjmaynes/shopping-cart-service-go/internal/handler/http"
+	"github.com/tjmaynes/shopping-cart-service-go/internal/pkg/item"
 )
 
 // API ..

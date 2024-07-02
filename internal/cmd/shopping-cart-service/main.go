@@ -4,7 +4,7 @@ import (
 	"flag"
 	"os"
 
-	api "github.com/tjmaynes/shopping-cart-service-go/pkg/api"
+	api "github.com/tjmaynes/shopping-cart-service-go/internal/pkg/api"
 )
 
 func main() {
