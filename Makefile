@@ -90,5 +90,8 @@ stop_local_db:
 	docker compose down
 	docker volume rm shopping-cart-service-go_shopping-cart-db
 
+ship_it: build test
+	git push
+
 clean:
 	rm -rf dist/ vendor/ coverage* report.xml
